@@ -23,6 +23,8 @@ SW.define('game/main', function(require, exports, module){
 
 		duration = 1000 / settings.fps,
 		elapseTime = 0,
+		drawingPoints = [],
+		waitingDraw = 0,
 
 		nowStage = 1,
 
@@ -64,6 +66,15 @@ SW.define('game/main', function(require, exports, module){
 				timeline.removeProc(gameRun);
 			}
 
+			context.save();
+			context.fillStyle = 'rgb(255,0,0)';
+			context.beginPath();
+			for(var i=0, len=drawingPoints.length; i<len; i+=2){
+				context.arc(drawingPoints[i], drawingPoints[i+1], 15, 0, Math.PI*2, false);
+			}
+			context.fill();
+			context.restore();
+
 			fps++;
 			if(Math.floor(tick / 1000) > secondCounter){
 				outputFps = fps;
@@ -75,16 +86,18 @@ SW.define('game/main', function(require, exports, module){
 		elapseTime = tick - tick % duration;
 	};
 
-	controller.addControl('ontouchstart' in window ? 'touchstart' : 'mousedown', function(ev){
-		if(ev.pageX>settings.width/2){
-			player.sendCommand('run');
-		}else{
-			player.sendCommand('back');
-		}
+	controller.addControl('start', function(x, y){
+		clearTimeout(waitingDraw);
 	});
 
-	controller.addControl('ontouchstart' in window ? 'touchend' : 'mouseup', function(){
-		player.sendCommand('idle');
+	controller.addControl('drawing', function(x, y){
+		drawingPoints.push(x, y);
+	});
+
+	controller.addControl('end', function(x, y){
+		waitingDraw = setTimeout(function(){
+			drawingPoints = [];
+		},500);
 	});
 
 	return 0;

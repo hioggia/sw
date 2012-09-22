@@ -124,7 +124,7 @@
 					script.removeEventListener('load',success,false);
 					script.removeEventListener('readystatechange',success,false);
 					script.removeEventListener('error',failure,false);
-					throw ('加載腳本時發生錯誤： '+url);
+					throw '加載腳本時發生錯誤： '+url;
 				};
 			counter++;
 			script.addEventListener('load',success,false);
