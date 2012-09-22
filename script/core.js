@@ -36,6 +36,11 @@
 
 		SW.define = function(url, factory){
 			//define(url, function(require, exports, module){ });
+			if( !(url in modules) ){
+				throw '通過require請求的文件與define中定義的路徑不符， 請檢查： '+url;
+				return;
+			}
+
 			modules[url] = {
 				exports: {},
 				factory: factory
@@ -145,24 +150,27 @@
 
 			function SuperluminalConstructor(){
 
-				for(var key in proto){
-					if(typeof proto[key] != 'function'){
-						this[key] = proto[key];
-					}
-				}
-
 				for(var key in property){
 					this[key] = property[key];
 				}
 
 				if(arguments.callee.caller != deriver && typeof this.init == 'function'){
-					//proto.apply(this);
 					this.init.apply(this,Array.prototype.slice.call(arguments,0));
 				}
 
 			};
 
-			SuperluminalConstructor.prototype = protoInst;
+			for(var key in protoInst){
+
+				if(typeof protoInst[key] == 'function'){
+					SuperluminalConstructor.prototype[key] = protoInst[key];
+				}else if(typeof protoInst[key] == 'object'){
+					property[key] = copy(protoInst[key]);
+				}else{
+					property[key] = protoInst[key];
+				}
+
+			}
 
 			for(var key in extras){
 
@@ -172,18 +180,6 @@
 					property[key] = copy(extras[key]);
 				}else{
 					property[key] = extras[key];
-				}
-
-			}
-
-			for(var key in protoInst){
-
-				if(typeof protoInst[key] == 'function'){
-					
-				}else if(typeof protoInst[key] == 'object'){
-					property[key] = copy(protoInst[key]);
-				}else{
-					property[key] = protoInst[key];
 				}
 
 			}
