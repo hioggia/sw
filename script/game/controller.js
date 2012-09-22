@@ -64,16 +64,8 @@ SW.define('game/controller', function(require, exports, module){
 
 				self.isStarted = false;
 
-				if(ev.touches){
-					x = ev.touches[0].pageX;
-					y = ev.touches[0].pageY;
-				}else{
-					x = ev.pageX;
-					y = ev.pageY;
-				}
-
 				for(var i=0, len=self.customEvents.end.length; i<len; i++){
-					self.customEvents.end[i].call(null, x, y);
+					self.customEvents.end[i].call(null);
 				}
 			},
 

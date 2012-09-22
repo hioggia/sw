@@ -68,11 +68,11 @@ SW.define('game/main', function(require, exports, module){
 
 			context.save();
 			context.fillStyle = 'rgb(255,0,0)';
-			context.beginPath();
 			for(var i=0, len=drawingPoints.length; i<len; i+=2){
+				context.beginPath();
 				context.arc(drawingPoints[i], drawingPoints[i+1], 15, 0, Math.PI*2, false);
+				context.fill();
 			}
-			context.fill();
 			context.restore();
 
 			fps++;
