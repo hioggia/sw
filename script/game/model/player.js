@@ -60,8 +60,14 @@ SW.define('game/model/player', function(require, exports, module){
 					case 'back':
 						self.elapseTick += tick - self.lastTick;
 						if(self.elapseTick >= self.speed){
-							self.x -= Math.floor(self.elapseTick / self.speed);
-							self.elapseTick = self.elapseTick % self.speed;
+							var currentWalk = Math.floor(self.elapseTick / self.speed);
+							self.walked += currentWalk;
+							if(self.walked<=self.walkLength){
+								self.x -= Math.floor(self.elapseTick / self.speed);
+								self.elapseTick = self.elapseTick % self.speed;
+							}else{
+								self.sendCommand('idle');
+							}							
 						}
 						break;
 					case 'fire':
