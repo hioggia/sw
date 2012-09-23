@@ -8,11 +8,11 @@ SW.define('modules/ease', function(require, exports, module){
 			return percent;
 		},
 
-		quadIn: function( percent ){
+		easeIn: function( percent ){
 			return Math.pow( percent, 2 );
 		},
 
-		quadOut: function( percent ){
+		easeOut: function( percent ){
 			return Math.pow( percent - 1, 2 ) + 1;
 		},
 
@@ -45,17 +45,17 @@ SW.define('modules/ease', function(require, exports, module){
 	return function( ease, percent ){
 		switch( ease.toLowerCase().replace(/\s/g,'') ){
 
-			case 'quadin':
-				return Ease.quadIn( percent );
+			case 'easein':
+				return Ease.easeIn( percent );
 
-			case 'quadout':
-				return Ease.quadOut( percent );
+			case 'easeout':
+				return Ease.easeOut( percent );
 
-			case 'quadinout':
+			case 'easeinout':
 				if(percent>0.5){
-					return Ease.quadOut(percent);
+					return Ease.easeOut(percent);
 				}
-				return Ease.quadIn(percent);
+				return Ease.easeIn(percent);
 
 			case 'cubicin':
 				return Ease.cubicIn( percent );

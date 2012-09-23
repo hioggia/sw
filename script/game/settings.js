@@ -13,8 +13,8 @@ SW.define('game/settings', {
 		size: 256,
 		leastScore: 50,
 		target: {
-			x: 40,
-			y: 80,
+			x: 300,
+			y: 40,
 			size: 64,
 			gap: 12,
 			time: 3
@@ -36,16 +36,16 @@ SW.define('game/settings', {
 			'idle': [0],
 			'run': [0],
 			'back': [0],
-			'fire': [0,1,0,1]
+			'fire': [0,1,0,1,0,0,0,0,0,0]
 		},
 		frameTime: 0.05,
 
 		speed: 80,
 		atk: 100,
-		hp: 5000,
+		hp: 8000,
 		cd: 0.5,
-		range: 100,
-		walkLength: 500
+		range: 180,
+		walkLength: 300
 	},
 
 	emeny1: {
@@ -86,7 +86,7 @@ SW.define('game/settings', {
 		atk: 50,
 		hp: 20000,
 		cd: 1,
-		range: 120,
+		range: 200,
 		vision: 400
 	}
 

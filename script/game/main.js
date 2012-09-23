@@ -81,7 +81,7 @@ SW.define('game/main', function(require, exports, module){
 			stage.drawBackground(context, camera.x);
 			stage.drawUnits(context, camera.x, settings.width);
 
-			context.fillText( player.hp, 850, 40 );
+			context.fillText( player.hp, 850, 80 );
 
 			if(player.hp <= 0){
 				alert('game over');
@@ -105,7 +105,7 @@ SW.define('game/main', function(require, exports, module){
 				fps = 0;
 				secondCounter++;
 			}
-			context.fillText( 'fps: '+outputFps, 10, 40 );
+			context.fillText( 'fps: '+outputFps, 10, 80 );
 		}
 		elapseTime = tick - tick % duration;
 	};
