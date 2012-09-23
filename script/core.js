@@ -151,7 +151,11 @@
 			function SuperluminalConstructor(){
 
 				for(var key in property){
-					this[key] = property[key];
+					if(typeof property[key] == 'object'){
+						this[key] = copy(property[key]);
+					}else{
+						this[key] = property[key];
+					}					
 				}
 
 				if(arguments.callee.caller != deriver && typeof this.init == 'function'){
@@ -164,8 +168,6 @@
 
 				if(typeof protoInst[key] == 'function'){
 					SuperluminalConstructor.prototype[key] = protoInst[key];
-				}else if(typeof protoInst[key] == 'object'){
-					property[key] = copy(protoInst[key]);
 				}else{
 					property[key] = protoInst[key];
 				}
@@ -176,8 +178,6 @@
 
 				if(typeof extras[key] == 'function'){
 					SuperluminalConstructor.prototype[key] = extras[key];
-				}else if(typeof extras[key] == 'object'){
-					property[key] = copy(extras[key]);
 				}else{
 					property[key] = extras[key];
 				}

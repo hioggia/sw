@@ -19,7 +19,7 @@ SW.define('game/stage', function(require, exports, module){
 					var emenyData = stageConfig.waves[0].emenys[i];
 					self.emenyUnits.push( new EmenyModel(emenyData.x, settings[emenyData.name], cache) );
 				}
-				self.background = new Background(settings.width, stageConfig.backgrounds, stageConfig.backgroundWidth, cache);
+				self.background = new Background(settings.width, stageConfig.backgrounds, stageConfig.backgroundWidth, settings.height, cache);
 			},
 
 			addPlayerUnit: function(player){

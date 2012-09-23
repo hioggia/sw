@@ -11,8 +11,8 @@ SW.define('game/damage', function(require, exports, module){
 			yOffset: 0,
 			alpha: 1,
 			lastTick: 0,
-			targetTime: 1000,
-			targetY: -200,
+			targetTime: 2000,
+			targetY: 100,
 
 			end: false,
 
@@ -28,9 +28,9 @@ SW.define('game/damage', function(require, exports, module){
 				if(self.lastTick == 0){
 					self.lastTick = tick;
 				}
-				if(tick - self.lastTick >= self.targetTime){
+				if(tick - self.lastTick <= self.targetTime){
 					var percent = easing('easeOut', (tick - self.lastTick)/self.targetTime);
-					self.yOffset = percent * targetY;
+					self.yOffset = percent * self.targetY;
 					self.alpha = 1 - percent;
 				}else{
 					self.end = true;
@@ -46,7 +46,7 @@ SW.define('game/damage', function(require, exports, module){
 				context.fillStyle = 'rgb(255,0,0)';
 				context.font = '20px sans-serif';
 				context.globalAlpha = self.alpha;
-				context.fillText( '-'+self.damage, x, y+self.yOffset );
+				context.fillText( '-'+self.damage, x, y-self.yOffset );
 				context.restore();
 			},
 

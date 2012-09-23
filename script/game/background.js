@@ -5,18 +5,20 @@ SW.define('game/background', function(require, exports, module){
 	var Background = SW.Class.derive({
 
 		width: 0,
+		height: 0,
 		screenWidth: 0,
 		imgList: null,
 		imgLength: 0,
 
 		cache: null,
 
-		init: function( screenWidth, imgList, imgWidth, cache ){
+		init: function( screenWidth, imgList, width, height, cache ){
 			var self = this;
 
 			self.cache = cache;
 			self.screenWidth = screenWidth;
-			self.width = imgWidth;
+			self.width = width;
+			self.height = height;
 			self.imgList = imgList;
 			self.imgLength = self.imgList.length;
 		},
@@ -31,7 +33,7 @@ SW.define('game/background', function(require, exports, module){
 				var realIndex = index % self.imgLength,
 					posX = index * self.width - x;
 
-				self.cache.drawTo( context, self.imgList[realIndex], posX, 0 );
+				self.cache.drawTo( context, self.imgList[realIndex], posX, 0, self.width, self.height );
 			}
 		},
 

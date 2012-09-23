@@ -8,6 +8,7 @@ SW.define('modules/imagecache', function(require, exports, module){
 		cached: 0,
 		callbacks: [],
 		loading: {},
+		animeIndex: {},
 		caches: {},
 
 		onload: null,
@@ -32,6 +33,7 @@ SW.define('modules/imagecache', function(require, exports, module){
 			self.attached++;
 			
 			var img = self.loading[url] = new Image();
+			self.animeIndex[url] = 0;
 			
 			img.addEventListener( 'load', self.onload, false );
 			img.addEventListener( 'error', self.onerror, false );
@@ -101,6 +103,7 @@ SW.define('modules/imagecache', function(require, exports, module){
 				self.loading[url].removeAttribute('data-url');
 				self.loading[url] = null;
 				delete self.loading[url];
+				delete self.animeIndex[url];
 			}
 			
 			for(var url in self.caches){
@@ -114,18 +117,42 @@ SW.define('modules/imagecache', function(require, exports, module){
 		drawTo: function(context, url){
 			var
 				self = this,
-				args = Array.prototype.slice.call(arguments,2),
-				cx = 0,
-				cy = 0,
-				cwidth = 0,
-				cheight = 0,
-				sx = 0,
-				sy = 0,
-				swidth = 0,
-				sheight = 0;
+				args = Array.prototype.slice.call(arguments,2);
 
 			if(!self.has(url)){
 				self.attach(url);
+				var
+					gradient,
+					percent,
+					color = '62,98,232',
+					index = self.animeIndex[url]+=5,
+					cx = 0,
+					cy = 0,
+					cwidth = 0,
+					cheight = 0;
+				switch(args.length){
+					case 4:
+						cx = args[0], cy = args[1], cwidth = args[2], cheight = args[3];
+						break;
+					case 8:
+						cx = args[4], cy = args[5], cwidth = args[6], cheight = args[7];
+						break;
+					default:
+						return;
+				}
+				gradient = context.createLinearGradient(0,cy,0,cheight+cy);
+				percent = index % cheight / cheight;
+				if(percent != 0){
+					gradient.addColorStop(0, 'rgba('+color+','+(1-percent)+')');
+					gradient.addColorStop(percent, 'rgba('+color+',1)');
+				}
+				gradient.addColorStop(percent, 'rgba('+color+',0)');
+				gradient.addColorStop(1, 'rgba('+color+','+(1-percent)+')');
+				context.save();
+				context.fillStyle = gradient;
+				context.fillRect(cx, cy, cwidth, cheight);
+				context.restore();
+				gradient = null;
 				return;
 			}
 
@@ -138,6 +165,7 @@ SW.define('modules/imagecache', function(require, exports, module){
 			self.clear();
 			self.caches = null;
 			self.loading = null;
+			self.animeIndex = null;
 			self.onload = null;
 			self.onerror = null;
 		},
@@ -153,6 +181,7 @@ SW.define('modules/imagecache', function(require, exports, module){
 			self.caches[url] = img;
 			self.loading[url] = null;
 			delete self.loading[url];
+			delete self.animeIndex[url];
 			
 			img.removeEventListener( 'load', self.onload, false );
 			img.removeEventListener( 'error', self.onerror, false );
@@ -176,6 +205,7 @@ SW.define('modules/imagecache', function(require, exports, module){
 			
 			self.loading[url] = null;
 			delete self.loading[url];
+			delete self.animeIndex[url];
 			
 			img.removeEventListener( 'load', self.onload, false );
 			img.removeEventListener( 'error', self.onerror, false );

@@ -13,7 +13,7 @@ SW.define('modules/ease', function(require, exports, module){
 		},
 
 		easeOut: function( percent ){
-			return Math.pow( percent - 1, 2 ) + 1;
+			return 1 - Math.pow( percent - 1, 2 );
 		},
 
 		cubicIn: function( percent ){

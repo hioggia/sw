@@ -77,6 +77,7 @@ SW.define('game/main', function(require, exports, module){
 		camera.update(tick);
 
 		if( (tick - elapseTime) / duration > 1 ){
+			context.clearRect(0,0,settings.width,settings.height);
 
 			stage.drawBackground(context, camera.x);
 			stage.drawUnits(context, camera.x, settings.width);
