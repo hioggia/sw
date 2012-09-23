@@ -7,7 +7,7 @@ SW.define('game/evaluation', function(require, exports, module){
 		context = canvas.getContext('2d'),
 		maxX = 0, maxY = 0, minX = Infinity, minY = Infinity,
 		points = null, radius = 0, data = null,
-		fullPixels = 0, result = '', score = Infinity,
+		fullPixels = 0, result = '', score = 0,
 		shapes = {
 			square: {},
 			round: {},
@@ -77,14 +77,15 @@ SW.define('game/evaluation', function(require, exports, module){
 		data = null;
 		context.globalCompositeOperation = 'source-over';
 
-		if(forcePixels < score){
+		forcePixels = fullPixels - forcePixels;
+		if(forcePixels > score){
 			score = forcePixels;
 			result = shape;
 		}
 	}
 
 	exports.draw = function (p, r){
-		points = p, radius = r, fullPixels = 0, result = '', score = Infinity;
+		points = p, radius = r, fullPixels = 0, result = '', score = 0;
 
 		for(var i=0, len=points.length; i<len; i+=2){
 			maxX = Math.max(points[i], maxX);
