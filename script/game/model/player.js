@@ -51,8 +51,10 @@ SW.define('game/model/player', function(require, exports, module){
 							self.walked += currentWalk;
 							if(self.walked<=self.walkLength){
 								self.x += currentWalk;
+								self.elapseTick = self.elapseTick % self.speed;
+							}else{
+								self.sendCommand('idle');
 							}
-							self.elapseTick = self.elapseTick % self.speed;
 						}
 						break;
 					case 'back':
