@@ -69,8 +69,10 @@ SW.define('game/model/player', function(require, exports, module){
 						if(self.elapseTick >= self.cd){
 							if(self.lockOn && self.lockOn.hp>0){
 								self.lockOn.damage(self.atk);
+								self.elapseTick = self.elapseTick % self.cd;
+							}else{
+								self.sendCommand('idle');
 							}
-							self.elapseTick = self.elapseTick % self.cd;
 						}
 						break;
 				}
