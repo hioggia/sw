@@ -14,6 +14,7 @@ SW.define('game/main', function(require, exports, module){
 		canvas = document.querySelector('canvas'),
 		context  = canvas.getContext('2d'),
 		settings = require('game/settings'),
+		evaluation = require('game/evaluation'),
 		timeline = new TimeLine(),
 		cache = new ImageCache(),
 		controller = null,
@@ -66,6 +67,8 @@ SW.define('game/main', function(require, exports, module){
 				timeline.removeProc(gameRun);
 			}
 
+			evaluation.drawTo(context);
+
 			context.save();
 			context.fillStyle = 'rgb(255,0,0)';
 			for(var i=0, len=drawingPoints.length; i<len; i+=2){
@@ -86,6 +89,11 @@ SW.define('game/main', function(require, exports, module){
 		elapseTime = tick - tick % duration;
 	};
 
+	function evaluationShape(){
+		evaluation.draw(drawingPoints, 15);
+		drawingPoints = [];
+	};
+
 	controller.addControl('start', function(x, y){
 		clearTimeout(waitingDraw);
 	});
@@ -96,7 +104,7 @@ SW.define('game/main', function(require, exports, module){
 
 	controller.addControl('end', function(x, y){
 		waitingDraw = setTimeout(function(){
-			drawingPoints = [];
+			evaluationShape();
 		},500);
 	});
 
