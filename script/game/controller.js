@@ -60,12 +60,23 @@ SW.define('game/controller', function(require, exports, module){
 			},
 
 			endEvent: function(ev){
-				var self = this;
+				var
+					self = this,
+					x = 0,
+					y = 0;
 
 				self.isStarted = false;
 
+				if(ev.changedTouches){
+					x = ev.changedTouches[0].pageX;
+					y = ev.changedTouches[0].pageY;
+				}else{
+					x = ev.pageX;
+					y = ev.pageY;
+				}
+
 				for(var i=0, len=self.customEvents.end.length; i<len; i++){
-					self.customEvents.end[i].call(null);
+					self.customEvents.end[i].call(null, x, y);
 				}
 			},
 
@@ -79,9 +90,9 @@ SW.define('game/controller', function(require, exports, module){
 					return;
 				}
 
-				if(ev.touches){
-					x = ev.touches[0].pageX;
-					y = ev.touches[0].pageY;
+				if(ev.changedTouches){
+					x = ev.changedTouches[0].pageX;
+					y = ev.changedTouches[0].pageY;
 				}else{
 					x = ev.pageX;
 					y = ev.pageY;

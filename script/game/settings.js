@@ -11,7 +11,7 @@ SW.define('game/settings', {
 	evaluation: {
 		imgUrl: 'image/evaluation.png',
 		size: 256,
-		leastScore: 50,
+		leastScore: 70,
 		target: {
 			x: 300,
 			y: 40,

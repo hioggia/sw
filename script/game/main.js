@@ -92,12 +92,19 @@ SW.define('game/main', function(require, exports, module){
 			commander.draw(context, tick);
 
 			context.save();
-			context.fillStyle = 'rgba(255,255,255,0.5)';
+			context.strokeStyle = 'rgba(255,255,255,0.5)';
+			context.lineWidth = settings.paintWidth*2;
+			context.lineCap = 'round';
+			context.beginPath();
 			for(var i=0, len=drawingPoints.length; i<len; i+=2){
-				context.beginPath();
-				context.arc(drawingPoints[i], drawingPoints[i+1], settings.paintWidth, 0, Math.PI*2, false);
-				context.fill();
+				if(drawingPoints[i] == '-'){
+					i++;
+					context.moveTo(drawingPoints[i], drawingPoints[i+1]);
+				}else{
+					context.lineTo(drawingPoints[i], drawingPoints[i+1]);
+				}
 			}
+			context.stroke();
 			context.restore();
 
 			fps++;
@@ -119,7 +126,7 @@ SW.define('game/main', function(require, exports, module){
 
 	controller.addControl('start', function(x, y){
 		clearTimeout(waitingDraw);
-		drawingPoints.push(x, y);
+		drawingPoints.push('-', x, y);
 	});
 
 	controller.addControl('drawing', function(x, y){
@@ -127,6 +134,7 @@ SW.define('game/main', function(require, exports, module){
 	});
 
 	controller.addControl('end', function(x, y){
+		drawingPoints.push(x, y);
 		waitingDraw = setTimeout(function(){
 			evaluationShape();
 		},300);

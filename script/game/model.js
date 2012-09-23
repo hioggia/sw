@@ -95,7 +95,7 @@ SW.define('game/model', function(require, exports, module){
 			drop: function(){
 				var self = this;
 
-				self.cache.erase(self.imgUrl);
+				//self.cache.erase(self.imgUrl);
 				self.cache = null;
 			}
 

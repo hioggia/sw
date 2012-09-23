@@ -51,11 +51,16 @@ SW.define('game/evaluation', function(require, exports, module){
 	};
 
 	function drawPoints(){
+		context.beginPath();
 		for(var i=0, len=points.length; i<len; i+=2){
-			context.beginPath();
-			context.arc(points[i]-minX+radius, points[i+1]-minY+radius, 15, 0, Math.PI*2, false);
-			context.fill();
+			if(points[i] == '-'){
+				i++;
+				context.moveTo(points[i]-minX+radius, points[i+1]-minY+radius);
+			}else{
+				context.lineTo(points[i]-minX+radius, points[i+1]-minY+radius);
+			}
 		}
+		context.stroke();
 	}
 
 	function evaluation(shape){
@@ -89,6 +94,9 @@ SW.define('game/evaluation', function(require, exports, module){
 		points = p, radius = r, minX = Infinity, minY = Infinity, fullPixels = 0, result = '', score = 0;
 
 		for(var i=0, len=points.length; i<len; i+=2){
+			if(points[i] == '-'){
+				i++;
+			}
 			maxX = Math.max(points[i], maxX);
 			maxY = Math.max(points[i+1], maxY);
 			minX = Math.min(points[i], minX);
@@ -101,6 +109,7 @@ SW.define('game/evaluation', function(require, exports, module){
 		canvas.height = size + radius*2;
 
 		context.lineWidth = radius*3; //容錯率1.5倍
+		context.lineCap = 'round';
 
 		drawPoints();
 		data = context.getImageData(0,0,canvas.width,canvas.height);
