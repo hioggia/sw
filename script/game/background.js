@@ -30,11 +30,8 @@ SW.define('game/background', function(require, exports, module){
 			for(var end=index+cross;index<end;index++){
 				var realIndex = index % self.imgLength,
 					posX = index * self.width - x;
-				if( !self.cache.has(self.imgList[realIndex]) ){
-					self.cache.attach(self.imgList[realIndex]);
-					continue;
-				}
-				context.drawImage( self.cache.get(self.imgList[realIndex]), posX, 0 );
+
+				self.cache.drawTo( context, self.imgList[realIndex], posX, 0 );
 			}
 		},
 

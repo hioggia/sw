@@ -27,7 +27,7 @@ SW.define('modules/imagecache', function(require, exports, module){
 				return;
 			}
 			
-			SW.log( '載入圖像: ' + url );
+			SW.log( '將圖像載入快取: ' + url );
 			
 			self.attached++;
 			
@@ -78,7 +78,7 @@ SW.define('modules/imagecache', function(require, exports, module){
 				}
 			}
 			
-			SW.log('回調已設置');
+			SW.log('快取回調已設置');
 			self.callbacks.push( callback );
 		},
 
@@ -109,6 +109,27 @@ SW.define('modules/imagecache', function(require, exports, module){
 			}
 
 			SW.log('快取已清零');
+		},
+
+		drawTo: function(context, url){
+			var
+				self = this,
+				args = Array.prototype.slice.call(arguments,2),
+				cx = 0,
+				cy = 0,
+				cwidth = 0,
+				cheight = 0,
+				sx = 0,
+				sy = 0,
+				swidth = 0,
+				sheight = 0;
+
+			if(!self.has(url)){
+				self.attach(url);
+				return;
+			}
+
+			context.drawImage.apply( context, [self.get(url)].concat(args) );
 		},
 
 		drop: function(){
@@ -153,8 +174,6 @@ SW.define('modules/imagecache', function(require, exports, module){
 
 			img.removeAttribute('data-url');
 			
-			SW.log( '載入圖像失敗: ' + url );
-			
 			self.loading[url] = null;
 			delete self.loading[url];
 			
@@ -162,6 +181,7 @@ SW.define('modules/imagecache', function(require, exports, module){
 			img.removeEventListener( 'error', self.onerror, false );
 			
 			self.attached--;
+			throw '載入圖像失敗: ' + url;
 		}
 
 	});

@@ -6,6 +6,26 @@ SW.define('game/settings', {
 	height: 640,
 	fps: 30,
 	font: '40px sans-serif',
+	paintWidth: 15,
+
+	evaluation: {
+		imgUrl: 'image/evaluation.png',
+		size: 256,
+		leastScore: 50,
+		target: {
+			x: 40,
+			y: 80,
+			size: 64,
+			gap: 12,
+			time: 3
+		},
+		shapes: {
+			'square': 0,
+			'round': 1,
+			'cross': 2,
+			'triangle': 3
+		}
+	},
 
 	player: {
 		y: 400,

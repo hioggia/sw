@@ -5,8 +5,7 @@ SW.define('game/evaluation', function(require, exports, module){
 	var
 		canvas = document.createElement('canvas'),
 		context = canvas.getContext('2d'),
-		maxX = 0, maxY = 0, minX = Infinity, minY = Infinity,
-		points = null, radius = 0, data = null,
+		points = null, radius = 0, minX = 0, minY = 0,
 		fullPixels = 0, result = '', score = 0,
 		shapes = {
 			square: {},
@@ -52,18 +51,17 @@ SW.define('game/evaluation', function(require, exports, module){
 	};
 
 	function drawPoints(){
-		context.save();
-		context.fillStyle = 'rgb(255,0,0)';
 		for(var i=0, len=points.length; i<len; i+=2){
 			context.beginPath();
 			context.arc(points[i]-minX+radius, points[i+1]-minY+radius, 15, 0, Math.PI*2, false);
 			context.fill();
 		}
-		context.restore();
 	}
 
 	function evaluation(shape){
-		var forcePixels = 0;
+		var
+			forcedPixels = 0,
+			data = null;
 		context.clearRect(0,0,canvas.width,canvas.height);
 		drawPoints();
 		context.globalCompositeOperation = 'destination-out';
@@ -71,21 +69,24 @@ SW.define('game/evaluation', function(require, exports, module){
 		data = context.getImageData(0,0,canvas.width,canvas.height);
 		for(var i=0,len=data.data.length; i<len; i+= 4){
 			if(data.data[i+3] != 0){
-				forcePixels += 1;
+				forcedPixels += 1;
 			}
 		}
 		data = null;
 		context.globalCompositeOperation = 'source-over';
 
-		forcePixels = fullPixels - forcePixels;
-		if(forcePixels > score){
-			score = forcePixels;
+		forcedPixels = fullPixels - forcedPixels;
+		if(forcedPixels > score){
+			score = forcedPixels;
 			result = shape;
 		}
 	}
 
-	exports.draw = function (p, r){
-		points = p, radius = r, fullPixels = 0, result = '', score = 0;
+	return function (p, r){
+		var data = null, maxX = 0, maxY = 0, size = 0;
+
+		//reset
+		points = p, radius = r, minX = Infinity, minY = Infinity, fullPixels = 0, result = '', score = 0;
 
 		for(var i=0, len=points.length; i<len; i+=2){
 			maxX = Math.max(points[i], maxX);
@@ -94,10 +95,12 @@ SW.define('game/evaluation', function(require, exports, module){
 			minY = Math.min(points[i+1], minY);
 		}
 
-		canvas.width = maxX - minX + radius*2;
-		canvas.height = maxY - minY + radius*2;
+		size = Math.max(maxX - minX, maxY - minY);
 
-		context.lineWidth = radius*2;
+		canvas.width = size + radius*2;
+		canvas.height = size + radius*2;
+
+		context.lineWidth = radius*3; //容錯率1.5倍
 
 		drawPoints();
 		data = context.getImageData(0,0,canvas.width,canvas.height);
@@ -112,15 +115,12 @@ SW.define('game/evaluation', function(require, exports, module){
 			evaluation(key);
 		}
 
-		alert([result,score,Math.floor(score/fullPixels*1000)/10+'%'].join(','));
+		return {
+			shape: result,
+			score: Math.floor(score/fullPixels*1000)/10,
+			x: minX,
+			y: minY,
+			size: size
+		};
 	};
-
-	exports.drawTo = function(context){
-		if(canvas.width == 0 || canvas.height == 0){
-			return;
-		}
-		context.drawImage(canvas, minX-15, minY-15);
-	};
-
-	return 0;
 });

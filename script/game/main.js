@@ -9,6 +9,7 @@ SW.define('game/main', function(require, exports, module){
 		GameController = require('game/controller'),
 		Camera = require('game/camera'),
 		Stage = require('game/stage'),
+		Commander = require('game/commander'),
 		PlayerModel = require('game/model/player'),
 
 		canvas = document.querySelector('canvas'),
@@ -21,6 +22,7 @@ SW.define('game/main', function(require, exports, module){
 		player = null,
 		stage = null,
 		camera = null,
+		commander = null,
 
 		duration = 1000 / settings.fps,
 		elapseTime = 0,
@@ -39,8 +41,9 @@ SW.define('game/main', function(require, exports, module){
 	context.font = settings.font;
 
 	controller = new GameController(canvas);
-	player = new PlayerModel( 30, settings.player, cache );
+	player = new PlayerModel(30, settings.player, cache);
 	camera = new Camera(player, 30, 300);
+	commander = new Commander(settings.evaluation, cache);
 
 	require('game/stage/'+nowStage,function(exports){
 
@@ -52,6 +55,7 @@ SW.define('game/main', function(require, exports, module){
 	});
 
 	function gameRun(tick){
+		var cmd = commander.getCommand();
 		stage.update(tick);
 		camera.update(tick);
 
@@ -67,13 +71,13 @@ SW.define('game/main', function(require, exports, module){
 				timeline.removeProc(gameRun);
 			}
 
-			evaluation.drawTo(context);
+			commander.draw(context, tick);
 
 			context.save();
 			context.fillStyle = 'rgb(255,0,0)';
 			for(var i=0, len=drawingPoints.length; i<len; i+=2){
 				context.beginPath();
-				context.arc(drawingPoints[i], drawingPoints[i+1], 15, 0, Math.PI*2, false);
+				context.arc(drawingPoints[i], drawingPoints[i+1], settings.paintWidth, 0, Math.PI*2, false);
 				context.fill();
 			}
 			context.restore();
@@ -90,12 +94,14 @@ SW.define('game/main', function(require, exports, module){
 	};
 
 	function evaluationShape(){
-		evaluation.draw(drawingPoints, 15);
+		var result = evaluation(drawingPoints, settings.paintWidth);
+		commander.addCommand(result);
 		drawingPoints = [];
 	};
 
 	controller.addControl('start', function(x, y){
 		clearTimeout(waitingDraw);
+		drawingPoints.push(x, y);
 	});
 
 	controller.addControl('drawing', function(x, y){
@@ -105,7 +111,7 @@ SW.define('game/main', function(require, exports, module){
 	controller.addControl('end', function(x, y){
 		waitingDraw = setTimeout(function(){
 			evaluationShape();
-		},500);
+		},300);
 	});
 
 	return 0;

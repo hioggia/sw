@@ -82,15 +82,10 @@ SW.define('game/model', function(require, exports, module){
 					sprite = null,
 					frame = 0;
 
-				if(!self.cache.has(self.imgUrl)){
-					self.cache.attach(self.imgUrl);
-					return;
-				}
-
 				sprite = self.sprites[self.command];
 				frame = Math.floor((self.lastTick-self.animeTick) / self.frameTime) % sprite.length;
 				sx = sprite[frame] * self.width;
-				context.drawImage( self.cache.get(self.imgUrl), sx, sy, self.width, self.height, x, self.y, self.width, self.height );
+				self.cache.drawTo( context, self.imgUrl, sx, sy, self.width, self.height, x, self.y, self.width, self.height );
 
 				for(var i=0, len=self.damageList.length; i<len; i++){
 					self.damageList[i].drawTo(context, x+self.width/2, self.y+50);
