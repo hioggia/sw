@@ -31,12 +31,12 @@ SW.define('game/stage', function(require, exports, module){
 			update: function(tick){
 				var self = this;
 
-				for(var i=0, len=self.playerUnits.length; i<len; i++){
-					self.playerUnits[i].update(tick);
-				}
-
-				for(var i=0, len=self.emenyUnits.length; i<len; i++){
+				for(var i=self.emenyUnits.length-1; i>=0; i--){
 					var emeny = self.emenyUnits[i];
+					if(emeny.hp <= 0){
+						emeny.drop();
+						self.emenyUnits.splice(i, 1);
+					}
 					for(var p=0, pLen=self.playerUnits.length; p<pLen; p++){
 						var player = self.playerUnits[p];
 						if(player.x > emeny.x){
@@ -51,6 +51,18 @@ SW.define('game/stage', function(require, exports, module){
 						}
 					}
 					emeny.update(tick);
+				}
+
+				for(var i=0, len=self.playerUnits.length; i<len; i++){
+					var player = self.playerUnits[i];
+					for(var e=0, eLen = self.emenyUnits.length; e<eLen; e++){
+						var emeny = self.emenyUnits[e];
+						if(emeny.x - player.range <= player.x){
+							player.lockOn = emeny;
+							break;
+						}
+					}
+					player.update(tick);
 				}
 			},
 

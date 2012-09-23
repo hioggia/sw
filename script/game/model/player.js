@@ -11,7 +11,8 @@ SW.define('game/model/player', function(require, exports, module){
 			atk: 0,
 			cd: 0,
 			range: 0,
-			vision: 0,
+			walked: 0,
+			walkLength: 0,
 
 			minX: 0,
 			maxX: Infinity,
@@ -25,6 +26,16 @@ SW.define('game/model/player', function(require, exports, module){
 				self.atk = settings.atk;
 				self.cd = settings.cd * 1000;
 				self.range = settings.range;
+				self.walkLength = settings.walkLength;
+			},
+
+			sendCommand: function(command){
+				var self = this;
+
+				if(self.command != 'run' && command == 'run'){
+					self.walked = 0;
+				}
+				self.parent('sendCommand', command);
 			},
 
 			update: function(tick){
@@ -36,7 +47,11 @@ SW.define('game/model/player', function(require, exports, module){
 					case 'run':
 						self.elapseTick += tick - self.lastTick;
 						if(self.elapseTick >= self.speed){
-							self.x += Math.floor(self.elapseTick / self.speed);
+							var currentWalk = Math.floor(self.elapseTick / self.speed);
+							self.walked += currentWalk;
+							if(self.walked<=self.walkLength){
+								self.x += currentWalk;
+							}
 							self.elapseTick = self.elapseTick % self.speed;
 						}
 						break;
@@ -45,6 +60,15 @@ SW.define('game/model/player', function(require, exports, module){
 						if(self.elapseTick >= self.speed){
 							self.x -= Math.floor(self.elapseTick / self.speed);
 							self.elapseTick = self.elapseTick % self.speed;
+						}
+						break;
+					case 'fire':
+						self.elapseTick += tick - self.lastTick;
+						if(self.elapseTick >= self.cd){
+							if(self.lockOn && self.lockOn.hp>0){
+								self.lockOn.damage(self.atk);
+							}
+							self.elapseTick = self.elapseTick % self.cd;
 						}
 						break;
 				}

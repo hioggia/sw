@@ -44,7 +44,8 @@ SW.define('game/settings', {
 		atk: 100,
 		hp: 5000,
 		cd: 0.5,
-		range: 100
+		range: 100,
+		walkLength: 500
 	},
 
 	emeny1: {

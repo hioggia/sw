@@ -56,6 +56,23 @@ SW.define('game/main', function(require, exports, module){
 
 	function gameRun(tick){
 		var cmd = commander.getCommand();
+		if(cmd != null){
+			cmd = cmd.join('');
+			switch(cmd){
+				case 'rrrs':
+					player.sendCommand('run');
+					break;
+				case 'srsr':
+					player.sendCommand('back');
+					break;
+				case 'ssrs':
+					player.sendCommand('fire');
+					break;
+				default:
+					player.sendCommand('idle');
+					break;
+			}
+		}
 		stage.update(tick);
 		camera.update(tick);
 
@@ -74,7 +91,7 @@ SW.define('game/main', function(require, exports, module){
 			commander.draw(context, tick);
 
 			context.save();
-			context.fillStyle = 'rgb(255,0,0)';
+			context.fillStyle = 'rgba(255,255,255,0.5)';
 			for(var i=0, len=drawingPoints.length; i<len; i+=2){
 				context.beginPath();
 				context.arc(drawingPoints[i], drawingPoints[i+1], settings.paintWidth, 0, Math.PI*2, false);
