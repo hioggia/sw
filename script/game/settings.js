@@ -11,7 +11,7 @@ SW.define('game/settings', {
 	evaluation: {
 		imgUrl: 'image/evaluation.png',
 		size: 256,
-		leastScore: 70,
+		leastScore: 60,
 		target: {
 			x: 300,
 			y: 40,
@@ -20,10 +20,10 @@ SW.define('game/settings', {
 			time: 3
 		},
 		shapes: {
-			'square': 0,
-			'round': 1,
-			'cross': 2,
-			'triangle': 3
+			'k': 0,
+			'o': 1,
+			't': 2,
+			'v': 3
 		}
 	},
 

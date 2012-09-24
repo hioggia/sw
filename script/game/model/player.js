@@ -29,20 +29,12 @@ SW.define('game/model/player', function(require, exports, module){
 				self.walkLength = settings.walkLength;
 			},
 
-			sendCommand: function(command){
-				var self = this;
-
-				if(self.command != 'run' && command == 'run'){
-					self.walked = 0;
-				}
-				self.parent('sendCommand', command);
-			},
-
 			update: function(tick){
 				var self = this;
 
 				switch(self.command){
 					case 'idle':
+						self.walked = 0;
 						break;
 					case 'run':
 						self.elapseTick += tick - self.lastTick;

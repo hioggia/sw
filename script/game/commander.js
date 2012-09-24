@@ -33,10 +33,9 @@ SW.define('game/commander', function(require, exports, module){
 			addCommand: function(result){
 				var self = this;
 
-				console.log(result.shape, result.score);
 				if(result.score>self.leastScore){
 					self.animeCommand.push({shape:result.shape,lastTick:undefined,pos:self.command.length,size:result.size,x:result.x,y:result.y});
-					self.command.push(result.shape.substring(0,1));
+					self.command.push(result.shape);
 				}
 			},
 

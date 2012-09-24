@@ -59,13 +59,13 @@ SW.define('game/main', function(require, exports, module){
 		if(cmd != null){
 			cmd = cmd.join('');
 			switch(cmd){
-				case 'rrrs':
+				case 'oook':
 					player.sendCommand('run');
 					break;
-				case 'srsr':
+				case 'okok':
 					player.sendCommand('back');
 					break;
-				case 'ssrs':
+				case 'kkok':
 					player.sendCommand('fire');
 					break;
 				default:
