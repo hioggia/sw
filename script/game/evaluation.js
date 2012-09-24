@@ -6,7 +6,7 @@ SW.define('game/evaluation', function(require, exports, module){
 		canvas = document.createElement('canvas'),
 		context = canvas.getContext('2d'),
 		points = null, radius = 0, minX = 0, minY = 0,
-		fullPixels = 0, result = '', score = 0,
+		result = '', score = 0,
 		shapes = {
 			square: {},
 			round: {},
@@ -16,12 +16,14 @@ SW.define('game/evaluation', function(require, exports, module){
 
 	shapes.square.draw = function(){
 		context.save();
+		context.lineWidth = radius*2;
 		context.strokeRect(radius,radius,canvas.width-radius*2,canvas.height-radius*2);
 		context.restore();
 	};
 
 	shapes.round.draw = function(){
 		context.save();
+		context.lineWidth = radius*2;
 		context.beginPath();
 		context.arc(canvas.width/2,canvas.height/2,(canvas.width+canvas.height)/4-radius,0,Math.PI*2,false);
 		context.stroke();
@@ -30,6 +32,7 @@ SW.define('game/evaluation', function(require, exports, module){
 
 	shapes.cross.draw = function(){
 		context.save();
+		context.lineWidth = radius*2;
 		context.beginPath();
 		context.moveTo(radius,radius);
 		context.lineTo(canvas.width-radius,canvas.height-radius);
@@ -41,6 +44,7 @@ SW.define('game/evaluation', function(require, exports, module){
 
 	shapes.triangle.draw = function(){
 		context.save();
+		context.lineWidth = radius*2;
 		context.beginPath();
 		context.moveTo(canvas.width/2,radius);
 		context.lineTo(canvas.width-radius,canvas.height-radius);
@@ -51,6 +55,8 @@ SW.define('game/evaluation', function(require, exports, module){
 	};
 
 	function drawPoints(){
+		context.save();	
+		context.lineWidth = radius*3;
 		context.beginPath();
 		for(var i=0, len=points.length; i<len; i+=2){
 			if(points[i] == '-'){
@@ -61,26 +67,35 @@ SW.define('game/evaluation', function(require, exports, module){
 			}
 		}
 		context.stroke();
+		context.restore();
 	}
 
 	function evaluation(shape){
 		var
+			fullPixels = 0,
 			forcedPixels = 0,
 			data = null;
 		context.clearRect(0,0,canvas.width,canvas.height);
-		drawPoints();
-		context.globalCompositeOperation = 'destination-out';
 		shapes[shape].draw();
 		data = context.getImageData(0,0,canvas.width,canvas.height);
 		for(var i=0,len=data.data.length; i<len; i+= 4){
 			if(data.data[i+3] != 0){
-				forcedPixels += 1;
+				fullPixels += 1;
+			}
+		}
+		forcedPixels = fullPixels;
+		context.globalCompositeOperation = 'destination-out';
+		drawPoints();
+		data = context.getImageData(0,0,canvas.width,canvas.height);
+		for(var i=0,len=data.data.length; i<len; i+= 4){
+			if(data.data[i+3] != 0){
+				forcedPixels -= 1;
 			}
 		}
 		data = null;
 		context.globalCompositeOperation = 'source-over';
 
-		forcedPixels = fullPixels - forcedPixels;
+		forcedPixels = Math.floor(forcedPixels/fullPixels*1000)/10;
 		if(forcedPixels > score){
 			score = forcedPixels;
 			result = shape;
@@ -88,10 +103,10 @@ SW.define('game/evaluation', function(require, exports, module){
 	}
 
 	return function (p, r){
-		var data = null, maxX = 0, maxY = 0, size = 0;
+		var maxX = 0, maxY = 0, size = 0;
 
 		//reset
-		points = p, radius = r, minX = Infinity, minY = Infinity, fullPixels = 0, result = '', score = 0;
+		points = p, radius = r, minX = Infinity, minY = Infinity, result = '', score = 0;
 
 		for(var i=0, len=points.length; i<len; i+=2){
 			if(points[i] == '-'){
@@ -108,17 +123,7 @@ SW.define('game/evaluation', function(require, exports, module){
 		canvas.width = size + radius*2;
 		canvas.height = size + radius*2;
 
-		context.lineWidth = radius*3; //容錯率1.5倍
 		context.lineCap = 'round';
-
-		drawPoints();
-		data = context.getImageData(0,0,canvas.width,canvas.height);
-		for(var i=0,len=data.data.length; i<len; i+= 4){
-			if(data.data[i+3] != 0){
-				fullPixels += 1;
-			}
-		}
-		data = null;
 
 		for(var key in shapes){
 			evaluation(key);
@@ -126,7 +131,7 @@ SW.define('game/evaluation', function(require, exports, module){
 
 		return {
 			shape: result,
-			score: Math.floor(score/fullPixels*1000)/10,
+			score: score,
 			x: minX,
 			y: minY,
 			size: size
