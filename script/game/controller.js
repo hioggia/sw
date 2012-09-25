@@ -3,7 +3,7 @@
 SW.define('game/controller', function(require, exports, module){
 
 	var
-		Controller = require('modules/controller'),
+		EventHost = require('modules/eventhost'),
 		typeOfTouchEvent = 'ontouchstart' in window,
 		typeOfStartEvent = typeOfTouchEvent ? 'touchstart' : 'mousedown',
 		typeOfMoveEvent = typeOfTouchEvent ? 'touchmove' : 'mousemove',
@@ -25,7 +25,7 @@ SW.define('game/controller', function(require, exports, module){
 				var self = this;
 
 				self.canvas = canvas;
-				self.controller = new Controller();
+				self.controller = new EventHost();
 
 				self.controller.bind(window, 'touchstart', function(ev){ ev.preventDefault() });
 				self.controller.bind(self.canvas, typeOfStartEvent, self.startEvent.bind(self));
