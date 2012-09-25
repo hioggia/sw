@@ -16,6 +16,7 @@ SW.define('game/model', function(require, exports, module){
 			frameTime: 0,
 
 			hp: 0,
+			maxHp: 0,
 
 			command: 'idle',
 			cache: null,
@@ -38,6 +39,7 @@ SW.define('game/model', function(require, exports, module){
 				self.cache = cache;
 
 				self.hp = settings.hp;
+				self.maxHp = settings.hp;
 			},
 
 			sendCommand: function(command){
@@ -87,8 +89,15 @@ SW.define('game/model', function(require, exports, module){
 				sx = sprite[frame] * self.width;
 				self.cache.drawTo( context, self.imgUrl, sx, sy, self.width, self.height, x, self.y, self.width, self.height );
 
+				context.save();
+				context.strokeStyle = '#000';
+				context.strokeRect(x, self.y-10, 100, 10);
+				context.fillStyle = '#0f0';
+				context.fillRect(x, self.y-10, Math.round(self.hp/self.maxHp*100), 10);
+				context.restore();
+
 				for(var i=0, len=self.damageList.length; i<len; i++){
-					self.damageList[i].drawTo(context, x+self.width/2, self.y+50);
+					self.damageList[i].drawTo(context, x+self.width/2, self.y);
 				}
 			},
 

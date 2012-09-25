@@ -16,6 +16,8 @@ SW.define('game/commander', function(require, exports, module){
 
 			command: [],
 			animeCommand: [],
+			fever: 0,
+			maxFever: 0,
 
 			init: function( settings, cache ){
 				var self = this;
@@ -26,6 +28,7 @@ SW.define('game/commander', function(require, exports, module){
 				self.shapes = settings.shapes;
 				self.target = settings.target;
 				self.leastScore = settings.leastScore;
+				self.maxFever = settings.maxFever;
 
 				self.target.time = self.target.time * 1000;
 			},
@@ -36,6 +39,10 @@ SW.define('game/commander', function(require, exports, module){
 				if(result.score>self.leastScore){
 					self.animeCommand.push({shape:result.shape,lastTick:undefined,pos:self.command.length,size:result.size,x:result.x,y:result.y});
 					self.command.push(result.shape);
+					self.fever += result.score / 10;
+					if(self.fever > self.maxFever){
+						self.fever = self.maxFever;
+					}
 				}
 			},
 
@@ -47,6 +54,22 @@ SW.define('game/commander', function(require, exports, module){
 				}
 
 				return self.command.splice(0,4);
+			},
+
+			getFever: function(){
+				var self = this;
+
+				return self.fever;
+			},
+
+			useFever: function(cost){
+				var
+					self = this,
+					used = 0;
+
+				used = Math.min(self.fever, cost);
+				self.fever -= used;
+				return used;
 			},
 
 			draw: function(context, tick){
@@ -84,6 +107,13 @@ SW.define('game/commander', function(require, exports, module){
 				if(allDone >= 4 && tick - self.animeCommand[3].lastTick >= 4500 ){
 					self.animeCommand.splice(0, 4);
 				}
+
+				context.save();
+				context.strokeStyle = '#000';
+				context.strokeRect( 10, 90, 300, 40 );
+				context.fillStyle = '#ddb708';
+				context.fillRect( 10, 90, Math.round(self.fever/self.maxFever*300), 40 );
+				context.restore();
 			},
 
 			drop: function(){

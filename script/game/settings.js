@@ -12,9 +12,10 @@ SW.define('game/settings', {
 		imgUrl: 'image/evaluation.png',
 		size: 256,
 		leastScore: 60,
+		maxFever: 250,
 		target: {
-			x: 300,
-			y: 40,
+			x: 15,
+			y: 140,
 			size: 64,
 			gap: 12,
 			time: 3

@@ -76,18 +76,16 @@ SW.define('game/main', function(require, exports, module){
 		stage.update(tick);
 		camera.update(tick);
 
+		if(player.hp <= 0){
+			alert('game over');
+			timeline.removeProc(gameRun);
+		}
+
 		if( (tick - elapseTime) / duration > 1 ){
 			context.clearRect(0,0,settings.width,settings.height);
 
 			stage.drawBackground(context, camera.x);
 			stage.drawUnits(context, camera.x, settings.width);
-
-			context.fillText( player.hp, 850, 80 );
-
-			if(player.hp <= 0){
-				alert('game over');
-				timeline.removeProc(gameRun);
-			}
 
 			commander.draw(context, tick);
 
@@ -113,7 +111,7 @@ SW.define('game/main', function(require, exports, module){
 				fps = 0;
 				secondCounter++;
 			}
-			context.fillText( 'fps: '+outputFps, 10, 80 );
+			context.fillText( 'fps: '+outputFps, 800, 80 );
 		}
 		elapseTime = tick - tick % duration;
 	};
