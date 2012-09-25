@@ -36,7 +36,7 @@
 
 		SW.define = function(url, factory){
 			//define(url, function(require, exports, module){ });
-			if( !(url in modules) ){
+			if( !SW.compiled && !(url in modules) ){
 				throw '通過require請求的文件與define中定義的路徑不符， 請檢查： '+url;
 				return;
 			}
@@ -47,20 +47,22 @@
 			};
 
 			if(typeof factory == 'function'){
-				var
-					content = factory.toString(),
-					regexp = /\brequire\b\s*\(\s*([\'\"])([\w\/\\-_]+)\1\s*\)/g;
+				if( !SW.compiled ){
+					var
+						content = factory.toString(),
+						regexp = /\brequire\b\s*\(\s*([\'\"])([\w\/\\-_]+)\1\s*\)/g;
 
-				content.replace(regexp, function($1,$2,$3){
-					load($3);
-					return $1;
-				});
+					content.replace(regexp, function($1,$2,$3){
+						load($3);
+						return $1;
+					});
+				}
 			}else{
 				modules[url].exports = factory;
 				delete modules[url].factory;
 			}
 
-			if(--counter == 0){
+			if(SW.compiled || --counter == 0){
 				for(var url in callbacks){
 					var
 						callback = callbacks[url],

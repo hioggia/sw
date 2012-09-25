@@ -1,0 +1,8 @@
+[complie]
+../../script/*.js
+
+[copy]
+../../index.html
+../../image/*
+
+[exclude]
