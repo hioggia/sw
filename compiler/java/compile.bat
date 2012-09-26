@@ -1,0 +1,1 @@
+java -jar compiler.jar --js ../../script/*.js ../../script/modules/*.js ../../script/game/*.js ../../script/game/model/*.js ../../script/game/stage/*.js --js_output_file ../../bin/sw.js

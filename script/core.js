@@ -38,7 +38,6 @@
 			//define(url, function(require, exports, module){ });
 			if( !SW.compiled && !(url in modules) ){
 				throw '通過require請求的文件與define中定義的路徑不符， 請檢查： '+url;
-				return;
 			}
 
 			modules[url] = {
