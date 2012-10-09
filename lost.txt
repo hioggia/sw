@@ -1,0 +1,4 @@
+1. fever結算改變，command改變
+2. player switch或support strike
+3. start與end介面
+4. 畫面表現力： 震動和特寫

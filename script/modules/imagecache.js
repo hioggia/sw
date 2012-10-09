@@ -122,10 +122,6 @@ SW.define('modules/imagecache', function(require, exports, module){
 			if(!self.has(url)){
 				self.attach(url);
 				var
-					gradient,
-					percent,
-					color = '62,98,232',
-					index = self.animeIndex[url]+=5,
 					cx = 0,
 					cy = 0,
 					cwidth = 0,
@@ -140,19 +136,7 @@ SW.define('modules/imagecache', function(require, exports, module){
 					default:
 						return;
 				}
-				gradient = context.createLinearGradient(0,cy,0,cheight+cy);
-				percent = index % cheight / cheight;
-				if(percent != 0){
-					gradient.addColorStop(0, 'rgba('+color+','+(1-percent)+')');
-					gradient.addColorStop(percent, 'rgba('+color+',1)');
-				}
-				gradient.addColorStop(percent, 'rgba('+color+',0)');
-				gradient.addColorStop(1, 'rgba('+color+','+(1-percent)+')');
-				context.save();
-				context.fillStyle = gradient;
-				context.fillRect(cx, cy, cwidth, cheight);
-				context.restore();
-				gradient = null;
+				drawLoadingEffect(context, self.animeIndex[url]+=10, cx, cy, cwidth, cheight);
 				return;
 			}
 
@@ -175,8 +159,6 @@ SW.define('modules/imagecache', function(require, exports, module){
 				self = this,
 				img = ev.target,
 				url = img.getAttribute('data-url');
-
-			img.removeAttribute('data-url');
 			
 			self.caches[url] = img;
 			self.loading[url] = null;
@@ -200,8 +182,6 @@ SW.define('modules/imagecache', function(require, exports, module){
 				self = this,
 				img = ev.target,
 				url = img.getAttribute('data-url');
-
-			img.removeAttribute('data-url');
 			
 			self.loading[url] = null;
 			delete self.loading[url];
@@ -215,6 +195,25 @@ SW.define('modules/imagecache', function(require, exports, module){
 		}
 
 	});
+
+	function drawLoadingEffect(context, index, x, y, width, height){
+		var 
+			gradient = context.createLinearGradient(0,y,0,height+y),
+			percent = index % height / height,
+			color = '62,98,232';
+
+		if(percent != 0){
+			gradient.addColorStop(0, 'rgba('+color+','+(1-percent/2)+')');
+			gradient.addColorStop(percent, 'rgba('+color+',1)');
+		}
+		gradient.addColorStop(percent, 'rgba('+color+',0.5)');
+		gradient.addColorStop(1, 'rgba('+color+','+(1-percent/2)+')');
+		context.save();
+		context.fillStyle = gradient;
+		context.fillRect(x, y, width, height);
+		context.restore();
+		gradient = null;
+	}
 
 	return ImageCache;
 

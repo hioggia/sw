@@ -3,7 +3,7 @@
 SW.define('game/model/emeny', function(require, exports, module){
 
 	var
-		Model = require('game/model'),
+		Model = require('game/module/model'),
 		
 		EmenyModel = Model.derive({
 

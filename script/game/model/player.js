@@ -3,7 +3,7 @@
 SW.define('game/model/player', function(require, exports, module){
 
 	var
-		Model = require('game/model'),
+		Model = require('game/module/model'),
 		
 		PlayerModel = Model.derive({
 

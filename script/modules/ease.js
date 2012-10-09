@@ -1,4 +1,5 @@
 //緩沖計算
+//計算中存在錯誤，目前只保證ease系列與cubic系列的計算是正確的
 
 SW.define('modules/ease', function(require, exports, module){
 

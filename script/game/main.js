@@ -5,17 +5,17 @@ SW.define('game/main', function(require, exports, module){
 	var
 		TimeLine = require('modules/timeline'),
 		ImageCache = require('modules/imagecache'),
+		Camera = require('modules/camera'),
 
-		GameController = require('game/controller'),
-		Camera = require('game/camera'),
-		Stage = require('game/stage'),
-		Commander = require('game/commander'),
+		GameController = require('game/module/controller'),
+		Stage = require('game/module/stage'),
+		Commander = require('game/module/commander'),
 		PlayerModel = require('game/model/player'),
 
 		canvas = document.querySelector('canvas'),
 		context  = canvas.getContext('2d'),
 		settings = require('game/settings'),
-		evaluation = require('game/evaluation'),
+		evaluation = require('game/module/evaluation'),
 		timeline = new TimeLine(),
 		cache = new ImageCache(),
 		controller = null,
@@ -42,7 +42,7 @@ SW.define('game/main', function(require, exports, module){
 
 	controller = new GameController(canvas);
 	player = new PlayerModel(30, settings.player, cache);
-	camera = new Camera(player, 30, 300);
+	camera = new Camera();
 	commander = new Commander(settings.evaluation, cache);
 
 	require('game/stage/'+nowStage,function(exports){
@@ -57,24 +57,10 @@ SW.define('game/main', function(require, exports, module){
 	function gameRun(tick){
 		var cmd = commander.getCommand();
 		if(cmd != null){
-			cmd = cmd.join('');
-			switch(cmd){
-				case 'oook':
-					player.sendCommand('run');
-					break;
-				case 'okok':
-					player.sendCommand('back');
-					break;
-				case 'kkok':
-					player.sendCommand('fire');
-					break;
-				default:
-					player.sendCommand('idle');
-					break;
-			}
+			player.sendCommand(cmd);
 		}
 		stage.update(tick);
-		camera.update(tick);
+		camera.watchX(player.x, 30, 300);
 
 		if(player.hp <= 0){
 			alert('game over');
