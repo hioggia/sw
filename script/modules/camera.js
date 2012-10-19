@@ -2,7 +2,7 @@
 
 SW.define('modules/camera', function(require, exports, module){
 
-	var Camera = SW.Class.derive({
+	var Camera = SW.Class.extend({
 
 		x: 0,
 		y: 0,

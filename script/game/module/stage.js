@@ -6,7 +6,7 @@ SW.define('game/module/stage', function(require, exports, module){
 		EmenyModel = require('game/model/emeny'),
 		Background = require('game/module/background'),
 
-		Stage = SW.Class.derive({
+		Stage = SW.Class.extend({
 
 			playerUnits: [],
 			emenyUnits: [],

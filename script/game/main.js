@@ -41,6 +41,7 @@ SW.define('game/main', function(require, exports, module){
 	context.font = settings.font;
 
 	controller = new GameController(canvas);
+	window.PlayerModel = PlayerModel;
 	player = new PlayerModel(30, settings.player, cache);
 	camera = new Camera();
 	commander = new Commander(settings.evaluation, cache);

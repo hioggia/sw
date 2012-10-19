@@ -7,7 +7,7 @@ SW.define('game/module/model', function(require, exports, module){
 
 		ViewModel = require('modules/viewmodel'),
 
-		Model = SW.ViewModel.derive({
+		Model = ViewModel.extend({
 
 			imgUrl: undefined,
 			sprites: null,
@@ -26,7 +26,7 @@ SW.define('game/module/model', function(require, exports, module){
 
 			init: function( x, settings, cache ){
 				var self = this;
-
+				
 				self.parent( 'init', x, settings.y, settings.width, settings.height );
 				self.imgUrl = settings.imgUrl;
 				self.sprites = settings.sprites;

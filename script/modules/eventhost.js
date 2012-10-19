@@ -2,7 +2,7 @@
 
 SW.define('modules/eventhost', function(require, exports, module){
 
-	var EventHost = SW.Class.derive({
+	var EventHost = SW.Class.extend({
 
 		bindEvents: {},
 		liveEvents: {},

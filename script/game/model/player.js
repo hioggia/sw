@@ -5,7 +5,7 @@ SW.define('game/model/player', function(require, exports, module){
 	var
 		Model = require('game/module/model'),
 		
-		PlayerModel = Model.derive({
+		PlayerModel = Model.extend({
 
 			speed: 0,
 			atk: 0,

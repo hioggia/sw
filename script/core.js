@@ -13,7 +13,7 @@
 	};
 
 	// 調試輸出
-	SW.log = function(){
+	SW.trace = function(){
 		if(SW.debug){
 			console.log.apply(console, Array.prototype.slice.call(arguments,0));
 		}
@@ -142,11 +142,11 @@
 
 		SW.Class = function SuperluminalConstructor(){};
 
-		SW.Class.derive = function( extras ){
+		SW.Class.extend = function( extras ){
 			var
 				proto = this,
 				protoInst = new proto,
-				deriver = arguments.callee,
+				extender = arguments.callee,
 				property = {};
 
 			function SuperluminalConstructor(){
@@ -159,7 +159,7 @@
 					}					
 				}
 
-				if(arguments.callee.caller != deriver && typeof this.init == 'function'){
+				if(arguments.callee.caller != extender && typeof this.init == 'function'){
 					this.init.apply(this,Array.prototype.slice.call(arguments,0));
 				}
 
@@ -186,10 +186,27 @@
 			}
 
 			SuperluminalConstructor.prototype.parent = function( method ){
-				return proto.prototype[method].apply( this, Array.prototype.slice.call(arguments, 1) );
+				var
+					deep = this.__proto__,
+					tmp = null,
+					result = undefined;
+				while(typeof deep.constructor != 'function'){
+					if(method in deep){
+						tmp = deep[method];
+						delete deep[method];
+						break;
+					}
+					deep = deep.constructor.__proto__;
+				}
+				result = tmp.apply( this, Array.prototype.slice.call(arguments, 1) );
+				deep[method] = tmp;
+				tmp = null;
+				return result;
 			}
+
+			SuperluminalConstructor.prototype.constructor = new proto;
 			
-			SuperluminalConstructor.derive = deriver;
+			SuperluminalConstructor.extend = extender;
 
 			return SuperluminalConstructor;
 		};

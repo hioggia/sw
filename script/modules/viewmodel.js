@@ -2,7 +2,7 @@
 
 SW.define('modules/viewmodel', function(require, exports, module){
 
-	var ViewModel = SW.Class.derive({
+	var ViewModel = SW.Class.extend({
 
 			x: 0,
 			y: 0,
@@ -13,9 +13,9 @@ SW.define('modules/viewmodel', function(require, exports, module){
 				var self = this;
 
 				self.x = x;
-				self.y = settings.y;
-				self.width = settings.width;
-				self.height = settings.height;
+				self.y = y;
+				self.width = width;
+				self.height = height;
 			},
 
 			drop: function(){

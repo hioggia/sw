@@ -2,7 +2,7 @@
 
 SW.define('game/module/background', function(require, exports, module){
 
-	var Background = SW.Class.derive({
+	var Background = SW.Class.extend({
 
 		width: 0,
 		height: 0,

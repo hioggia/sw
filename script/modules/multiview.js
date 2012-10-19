@@ -52,7 +52,7 @@ SW.define('modules/multiview', function(require, exports, module){
 
 		},
 
-		SubViewModel = SW.Class.derive({
+		SubViewModel = SW.Class.extend({
 
 			key: '',
 			elements: {},

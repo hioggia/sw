@@ -5,7 +5,7 @@ SW.define('game/module/damage', function(require, exports, module){
 	var 
 		easing = require('modules/ease'),
 
-		Damage = SW.Class.derive({
+		Damage = SW.Class.extend({
 
 			damage: 0,
 			yOffset: 0,

@@ -5,7 +5,7 @@ SW.define('game/module/commander', function(require, exports, module){
 	var 
 		easing = require('modules/ease'),
 
-		Commander = SW.Class.derive({
+		Commander = SW.Class.extend({
 
 			cache: null,
 			imgUrl: undefined,

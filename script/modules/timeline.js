@@ -2,7 +2,7 @@
 
 SW.define('modules/timeline', function(require, exports, module){
 
-	var TimeLine = SW.Class.derive({
+	var TimeLine = SW.Class.extend({
 
 		// 內部屬性
 		id: undefined,

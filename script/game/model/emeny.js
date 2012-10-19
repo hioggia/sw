@@ -5,7 +5,7 @@ SW.define('game/model/emeny', function(require, exports, module){
 	var
 		Model = require('game/module/model'),
 		
-		EmenyModel = Model.derive({
+		EmenyModel = Model.extend({
 
 			speed: 0,
 			atk: 0,

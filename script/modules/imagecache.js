@@ -2,7 +2,7 @@
 
 SW.define('modules/imagecache', function(require, exports, module){
 
-	var ImageCache = SW.Class.derive({
+	var ImageCache = SW.Class.extend({
 
 		attached: 0,
 		cached: 0,
@@ -28,7 +28,7 @@ SW.define('modules/imagecache', function(require, exports, module){
 				return;
 			}
 			
-			SW.log( '將圖像載入快取: ' + url );
+			SW.trace( '將圖像載入快取: ' + url );
 			
 			self.attached++;
 			
@@ -46,7 +46,7 @@ SW.define('modules/imagecache', function(require, exports, module){
 			var self = this;
 
 			if( url in self.caches ){
-				SW.log('移除快取: ' + url);
+				SW.trace('移除快取: ' + url);
 
 				self.caches[url] = null;
 				delete self.caches[url];
@@ -63,7 +63,7 @@ SW.define('modules/imagecache', function(require, exports, module){
 				return self.caches[url];
 			}
 			
-			SW.log( '請求的圖像不存在快取中: ' + url );
+			SW.trace( '請求的圖像不存在快取中: ' + url );
 			return null;
 		},
 
@@ -80,7 +80,7 @@ SW.define('modules/imagecache', function(require, exports, module){
 				}
 			}
 			
-			SW.log('快取回調已設置');
+			SW.trace('快取回調已設置');
 			self.callbacks.push( callback );
 		},
 
@@ -111,7 +111,7 @@ SW.define('modules/imagecache', function(require, exports, module){
 				delete self.caches[url];
 			}
 
-			SW.log('快取已清零');
+			SW.trace('快取已清零');
 		},
 
 		drawTo: function(context, url){

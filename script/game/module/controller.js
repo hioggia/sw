@@ -9,7 +9,7 @@ SW.define('game/module/controller', function(require, exports, module){
 		typeOfMoveEvent = typeOfTouchEvent ? 'touchmove' : 'mousemove',
 		typeOfEndEvent = typeOfTouchEvent ? 'touchend' : 'mouseup',
 
-		GameController = SW.Class.derive({
+		GameController = SW.Class.extend({
 
 			canvas: null,
 			controller: null,
