@@ -156,7 +156,7 @@
 						this[key] = copy(property[key]);
 					}else{
 						this[key] = property[key];
-					}					
+					}
 				}
 
 				if(arguments.callee.caller != extender && typeof this.init == 'function'){
@@ -187,7 +187,7 @@
 
 			SuperluminalConstructor.prototype.parent = function( method ){
 				var
-					deep = this.__proto__,
+					deep = this.__proto__.constructor.__proto__,
 					tmp = null,
 					result = undefined;
 				while(typeof deep.constructor != 'function'){
@@ -205,7 +205,7 @@
 			}
 
 			SuperluminalConstructor.prototype.constructor = new proto;
-			
+
 			SuperluminalConstructor.extend = extender;
 
 			return SuperluminalConstructor;
@@ -239,7 +239,7 @@
 		}
 
 	})();
-	
+
 
 })(window,'SW');
 
